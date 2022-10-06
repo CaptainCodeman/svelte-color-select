@@ -2,6 +2,8 @@
 
 OKHsv Color Selection component for Svelte using OKLab perceptual colorspace
 
+![OKHsv color select screenshot](./screenshot.png)
+
 ## Usage
 
 Installing your package manager of choice:
