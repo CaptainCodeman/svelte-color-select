@@ -14,7 +14,7 @@ Import into your component and bind `r`, `g`, and `b` values to it:
 
 ```html
 <script lang="ts">
-	 import ColorSelect from 'svelte-color-select`
+	import ColorSelect from 'svelte-color-select`
 
 	let r = 102
 	let g = 51
