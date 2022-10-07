@@ -1,3 +1,3 @@
 import "../app.postcss"
 
-export let ssr = false
+export const prerender = true

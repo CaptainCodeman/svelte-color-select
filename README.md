@@ -4,7 +4,7 @@ Okhsv Color Selection component for Svelte using OKLab perceptual colorspace.
 
 Based on the work of [Björn Ottosson](https://bottosson.github.io/) and adapted to work as a Svelte component. See [Okhsv and Okhsl - Two new color spaces for color picking](https://bottosson.github.io/posts/colorpicker/) for more information about Okhsv and Oklab.
 
-![OKHsv color select screenshot](./screenshot.png)
+![Okhsv color select screenshot](./screenshot.png)
 
 ## Usage
 

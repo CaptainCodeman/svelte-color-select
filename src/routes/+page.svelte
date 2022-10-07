@@ -10,10 +10,10 @@
 </script>
 
 <svelte:head>
-	<title>OKHsv Color Select</title>
+	<title>Okhsv Color Select</title>
 </svelte:head>
 
-<h1 class="text-zinc-100 mx-8 mt-16 font-extrabold text-3xl">OKHsv Color Select</h1>
+<h1 class="text-zinc-100 mx-8 mt-16 font-extrabold text-3xl">Okhsv Color Select</h1>
 <p class="text-zinc-400 mx-8 mt-2">HSV style color select using OKLab perceptual color space.</p>
 
 <ColorSelect class="m-8 bg-zinc-600" bind:r bind:g bind:b />
