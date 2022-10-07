@@ -18,10 +18,12 @@
 
 	let canvas: HTMLCanvasElement
 	let ctx: CanvasRenderingContext2D
+	let image: ImageData
 
 	function render_square(node: HTMLCanvasElement) {
 		canvas = node
 		ctx = canvas.getContext('2d')!
+		image = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
 		update_sv(x, y)
 	}
@@ -49,7 +51,7 @@
 		g = rgb[1]
 		b = rgb[2]
 
-		const image = render_main_image(r, g, b)
+		render_main_image(r, g, b, image)
 		ctx.putImageData(image, 0, 0)
 	}
 
