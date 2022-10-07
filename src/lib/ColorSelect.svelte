@@ -14,6 +14,7 @@
 	$: x = picker_size * okhsv[1]
 	$: y = picker_size * (1 - okhsv[2])
 	$: v = Math.round(picker_size * okhsv[0])
+	$: update_square(okhsv[0], okhsv[1], okhsv[2])
 
 	let canvas: HTMLCanvasElement
 	let ctx: CanvasRenderingContext2D
@@ -40,6 +41,8 @@
 	}
 
 	function update_square(h: number, s: number, v: number) {
+		if (!canvas) return
+
 		const rgb = okhsv_to_srgb(h, s, v)
 
 		r = rgb[0]
@@ -53,12 +56,13 @@
 	function update_sv(x: number, y: number) {
 		let new_s = clamp(x / picker_size)
 		let new_v = clamp(1 - y / picker_size)
-		update_square(okhsv[0], new_s, new_v)
+		okhsv[1] = new_s
+		okhsv[2] = new_v
 	}
 
 	function update_h(x: number, y: number) {
 		let h = clamp(y / picker_size)
-		update_square(h, okhsv[1], okhsv[2])
+		okhsv[0] = h
 	}
 
 	function pointer(node: HTMLCanvasElement, fn: (x: number, y: number) => void) {
@@ -84,7 +88,6 @@
 
 	function onKeydown(event: KeyboardEvent) {
 		const step = event.shiftKey ? 10 : 1
-		console.log(event.key, step)
 		switch (event.key) {
 			case 'ArrowUp':
 				if (event.altKey) {
