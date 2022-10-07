@@ -1,6 +1,32 @@
 {
   "name": "svelte-color-select",
-  "version": "0.0.2",
+  "description": "Okhsl color select for Svelte",
+  "version": "0.0.3",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "svelte",
+    "oklab",
+    "kkhsl",
+    "hsl",
+    "color",
+    "color-picker",
+    "color-select"
+  ],
+  "homepage": "https://captaincodeman.github.io/svelte-color-select/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/captaincodeman/svelte-color-select.git"
+  },
+  "bugs": {
+    "url": "https://github.com/captaincodeman/svelte-color-select/issues",
+    "email": "simon@captaincodeman.com"
+  },
+  "author": {
+    "name": "Simon Green",
+    "email": "simon@captaincodeman.com",
+    "url": "https://www.captaincodeman.com/"
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
@@ -25,7 +51,6 @@
     "typescript": "^4.7.4",
     "vite": "^3.1.0"
   },
-  "type": "module",
   "dependencies": {
     "hsluv": "^1.0.0"
   }
