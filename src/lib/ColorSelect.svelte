@@ -89,7 +89,11 @@
 	}
 
 	function onKeydown(event: KeyboardEvent) {
+		event.preventDefault()
+		event.stopPropagation()
+
 		const step = event.shiftKey ? 10 : 1
+
 		switch (event.key) {
 			case 'ArrowUp':
 				if (event.altKey) {
@@ -98,6 +102,7 @@
 					update_sv(x, Math.round(y - step))
 				}
 				break
+
 			case 'ArrowDown':
 				if (event.altKey) {
 					update_h(x, Math.round(v + step))
@@ -105,9 +110,11 @@
 					update_sv(x, Math.round(y + step))
 				}
 				break
+
 			case 'ArrowLeft':
 				update_sv(Math.round(x - step), y)
 				break
+
 			case 'ArrowRight':
 				update_sv(Math.round(x + step), y)
 				break
