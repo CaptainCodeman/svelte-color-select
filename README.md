@@ -14,7 +14,7 @@ Installing your package manager of choice:
 
 Import into your component and bind `r`, `g`, and `b` values to it:
 
-```html
+```svelte
 <script lang="ts">
 	import ColorSelect from 'svelte-color-select`
 
@@ -24,4 +24,10 @@ Import into your component and bind `r`, `g`, and `b` values to it:
 </script>
 
 <ColorSelect bind:r bind:g bind:b />
+```
+
+Alternatively, you can set the initial rgb values and listen to the `change` event to see the updates in both rgb and okhsv format:
+
+```svelte
+<ColorSelect {r} {g} {b} on:change={e => console.log(e.detail)} />
 ```

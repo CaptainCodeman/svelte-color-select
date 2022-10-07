@@ -2,11 +2,13 @@
 	import { okhsv_to_srgb, srgb_to_okhsv } from './colorconversion'
 	import { eps, picker_size, slider_width, border_size, gap_size } from './constants'
 	import { render_main_image, render_slider_image } from './render'
+	import { createEventDispatcher } from 'svelte'
 
 	export let r = 0
 	export let g = 0
 	export let b = 0
 
+	const dispatch = createEventDispatcher()
 	const width = picker_size + slider_width + gap_size + border_size * 2
 	const height = picker_size + border_size * 2
 
@@ -53,6 +55,8 @@
 
 		render_main_image(r, g, b, image)
 		ctx.putImageData(image, 0, 0)
+
+		dispatch('change', { rgb, okhsv })
 	}
 
 	function update_sv(x: number, y: number) {

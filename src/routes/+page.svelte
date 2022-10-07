@@ -5,8 +5,6 @@
 	let r = 102
 	let g = 51
 	let b = 153
-
-	// $: document.body.style.backgroundColor = `rgb(${r},${g},${b})`
 </script>
 
 <svelte:head>
@@ -16,7 +14,7 @@
 <h1 class="text-zinc-100 mx-8 mt-16 font-extrabold text-3xl">Okhsv Color Select</h1>
 <p class="text-zinc-400 mx-8 mt-2">HSV style color select using OKLab perceptual color space.</p>
 
-<ColorSelect class="m-8 bg-zinc-600" bind:r bind:g bind:b />
+<ColorSelect class="m-8 bg-zinc-600" bind:r bind:g bind:b on:change={e => console.log(e.detail.okhsv)} />
 
 <p class="text-zinc-400 mx-8 mt-2">Use left / right arrow keys to adjust Saturation, up / down to adjust Brightness.</p>
 <p class="text-zinc-400 mx-8 mt-2">Hold shift for larger steps and alt / option key to adjust Hue.</p>
