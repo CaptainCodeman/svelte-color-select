@@ -18,7 +18,7 @@
 
 <ColorSelect class="m-8 bg-zinc-600" bind:r bind:g bind:b />
 
-<p class="text-zinc-400 mx-8 mt-2">Use left / right arrow keys to adjust Saturation, up / down to adjust Brigtness.</p>
+<p class="text-zinc-400 mx-8 mt-2">Use left / right arrow keys to adjust Saturation, up / down to adjust Brightness.</p>
 <p class="text-zinc-400 mx-8 mt-2">Hold shift for larger steps and alt / option key to adjust Hue.</p>
 
 <div class="m-12">
