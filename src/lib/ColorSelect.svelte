@@ -73,22 +73,39 @@
 
 	function pointer(node: HTMLCanvasElement, fn: (x: number, y: number) => void) {
 		function update(event: PointerEvent) {
-			const rect = node.getBoundingClientRect()
-			const x = clamp255(event.clientX - rect.left)
-			const y = clamp255(event.clientY - rect.top)
+			const x = clamp255(event.offsetX)
+			const y = clamp255(event.offsetY)
 			fn(x, y)
 		}
 
-		node.onpointerdown = event => {
+		function onpointerdown(event: PointerEvent) {
+			event.stopPropagation()
 			node.setPointerCapture(event.pointerId)
 			update(event)
+		}
 
-			node.onpointermove = update
+		function onpointermove(event: PointerEvent) {
+			event.stopPropagation()
+			update(event)
+		}
 
-			node.onpointerup = event => {
-				node.onpointermove = null
-				node.onpointerup = null
-			}
+		function onpointerend(event: PointerEvent) {
+			event.stopPropagation()
+			node.releasePointerCapture(event.pointerId)
+		}
+
+		node.addEventListener('pointerdown', onpointerdown, { passive: true })
+		node.addEventListener('pointermove', onpointermove, { passive: true })
+		node.addEventListener('pointerup', onpointerend, { passive: true })
+		node.addEventListener('pointercancel', onpointerend, { passive: true })
+
+		return {
+			destroy() {
+				node.removeEventListener('pointerdown', onpointerdown)
+				node.removeEventListener('pointermove', onpointermove)
+				node.removeEventListener('pointerup', onpointerend)
+				node.removeEventListener('pointercancel', onpointerend)
+			},
 		}
 	}
 
@@ -126,6 +143,7 @@
 	}
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div class={$$props.class} tabindex="0" style:width="{width}px" style:height="{height}px" on:keydown={onKeydown}>
 	<canvas
 		id="okhsv_sv_canvas"
@@ -169,6 +187,7 @@
 
 	canvas,
 	svg {
+		touch-action: none;
 		position: absolute;
 	}
 
