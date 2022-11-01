@@ -72,6 +72,8 @@
 	}
 
 	function pointer(node: HTMLCanvasElement, fn: (x: number, y: number) => void) {
+		let active = false
+
 		function update(event: PointerEvent) {
 			const x = clamp255(event.offsetX)
 			const y = clamp255(event.offsetY)
@@ -82,16 +84,20 @@
 			event.stopPropagation()
 			node.setPointerCapture(event.pointerId)
 			update(event)
+			active = true
 		}
 
 		function onpointermove(event: PointerEvent) {
 			event.stopPropagation()
-			update(event)
+			if (active) {
+				update(event)
+			}
 		}
 
 		function onpointerend(event: PointerEvent) {
 			event.stopPropagation()
 			node.releasePointerCapture(event.pointerId)
+			active = false
 		}
 
 		node.addEventListener('pointerdown', onpointerdown, { passive: true })
