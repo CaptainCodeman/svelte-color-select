@@ -11,7 +11,6 @@ const items = palette.map(item => {
   const oklab = convert(srgb, "oklab").coords
   return { code, hex, oklab, rgb: srgb.coords }
 })
-console.log(items)
 
 function distance(a: any, b: any) {
   const dl = a.oklab[0] - b.oklab[0]
