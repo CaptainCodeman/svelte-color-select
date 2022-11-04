@@ -13,10 +13,11 @@
 	const height = picker_size + border_size * 2
 
 	$: okhsv = srgb_to_okhsv(r, g, b)
-	$: x = picker_size * okhsv[1]
-	$: y = picker_size * (1 - okhsv[2])
-	$: v = Math.round(picker_size * okhsv[0])
-	$: update_square(okhsv[0], okhsv[1], okhsv[2])
+	$: uihsv = scale_to_ui(okhsv)
+	$: update_square(okhsv[0])
+
+	// used to prevent re-drawing square for minor hue changes
+	let prev_h = 0
 
 	let canvas: HTMLCanvasElement
 	let ctx: CanvasRenderingContext2D
@@ -27,7 +28,18 @@
 		ctx = canvas.getContext('2d')!
 		image = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
-		update_sv(x, y)
+		update_square(okhsv[0])
+	}
+
+	function update_square(h: number) {
+		if (!canvas) return
+
+		if (Math.abs(h - prev_h) > eps) {
+			render_main_image(h, image)
+			ctx.putImageData(image, 0, 0)
+		}
+
+		prev_h = h
 	}
 
 	function render_slider(node: HTMLCanvasElement) {
@@ -36,25 +48,28 @@
 		ctx.putImageData(image, 0, 0)
 	}
 
+	function scale_to_ui(okhsv: number[]) {
+		return [clamp_ui(okhsv[0]), clamp_ui(okhsv[1]), clamp_ui(1 - okhsv[2])]
+	}
+
 	function clamp(x: number) {
 		return x < eps ? eps : x > 1 - eps ? 1 - eps : x
 	}
 
-	function clamp255(value: number) {
+	function clamp_255(value: number) {
 		return value < 0 ? 0 : value > 255 ? 255 : value
 	}
 
-	function update_square(h: number, s: number, v: number) {
-		if (!canvas) return
+	function clamp_ui(value: number) {
+		return value < 0 ? 0 : value > 1 ? picker_size : value * picker_size
+	}
 
-		const rgb = okhsv_to_srgb(h, s, v)
+	async function update_rgb() {
+		const rgb = okhsv_to_srgb(okhsv[0], okhsv[1], okhsv[2]).map(clamp_255)
 
 		r = rgb[0]
 		g = rgb[1]
 		b = rgb[2]
-
-		render_main_image(r, g, b, image)
-		ctx.putImageData(image, 0, 0)
 
 		dispatch('change', { rgb, okhsv })
 	}
@@ -62,21 +77,26 @@
 	function update_sv(x: number, y: number) {
 		let new_s = clamp(x / picker_size)
 		let new_v = clamp(1 - y / picker_size)
+
 		okhsv[1] = new_s
 		okhsv[2] = new_v
+
+		update_rgb()
 	}
 
 	function update_h(x: number, y: number) {
 		let h = clamp(y / picker_size)
 		okhsv[0] = h
+
+		update_rgb()
 	}
 
 	function pointer(node: HTMLCanvasElement, fn: (x: number, y: number) => void) {
 		let active = false
 
 		function update(event: PointerEvent) {
-			const x = clamp255(event.offsetX)
-			const y = clamp255(event.offsetY)
+			const x = event.offsetX
+			const y = event.offsetY
 			fn(x, y)
 		}
 
@@ -124,26 +144,26 @@
 		switch (event.key) {
 			case 'ArrowUp':
 				if (event.altKey) {
-					update_h(x, Math.round(v - step))
+					update_h(0, Math.round(uihsv[0] - step))
 				} else {
-					update_sv(x, Math.round(y - step))
+					update_sv(uihsv[1], Math.round(uihsv[2] - step))
 				}
 				break
 
 			case 'ArrowDown':
 				if (event.altKey) {
-					update_h(x, Math.round(v + step))
+					update_h(0, Math.round(uihsv[0] + step))
 				} else {
-					update_sv(x, Math.round(y + step))
+					update_sv(uihsv[1], Math.round(uihsv[2] + step))
 				}
 				break
 
 			case 'ArrowLeft':
-				update_sv(Math.round(x - step), y)
+				update_sv(Math.round(uihsv[1] - step), uihsv[2])
 				break
 
 			case 'ArrowRight':
-				update_sv(Math.round(x + step), y)
+				update_sv(Math.round(uihsv[1] + step), uihsv[2])
 				break
 		}
 	}
@@ -170,20 +190,22 @@
 	/>
 
 	<svg {width} {height}>
-		<g transform="translate({border_size + 0.5},{border_size + 0.5})">
-			<g transform="translate({x},{y})">
+		<g transform="translate({border_size},{border_size})">
+			<g transform="translate({uihsv[1]},{uihsv[2]})">
 				<circle cx="0" cy="0" r="5" fill="none" stroke-width="1.75" stroke="#fff" />
 				<circle cx="0" cy="0" r="6" fill="none" stroke-width="1.25" stroke="#000" />
 			</g>
 		</g>
-		<g transform="translate({picker_size + gap_size},{border_size + 0.5})">
-			<g transform="translate(0,{v})">
+		<g transform="translate({picker_size + gap_size},{border_size})">
+			<g transform="translate(0,{uihsv[0]})">
 				<polygon points="-7,-4 -1,0 -7,4" fill="#fff" stroke-width="0.8" stroke="#000" />
 				<polygon points="{slider_width + 7},-4 {slider_width + 1},0 {slider_width + 7},4" fill="#fff" stroke-width="0.8" stroke="#000" />
 			</g>
 		</g>
 	</svg>
 </div>
+
+<button on:click={() => (r = Math.round(r))}>Set R</button>
 
 <style>
 	div {

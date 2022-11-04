@@ -119,15 +119,13 @@ function upscale(lowres_data: Float32Array, data: Uint8ClampedArray) {
   data[target_index + 2] = b
 }
 
-export function render_main_image(r: number, g: number, b: number, image: ImageData) {
-  const hsv = srgb_to_okhsv(r, g, b)
-
+export function render_main_image(hue: number, image: ImageData) {
   const data = image.data
   const lowres_data = new Float32Array(lowres_picker_size * lowres_picker_size * 3)
 
   for (let i = 0; i < lowres_picker_size; i++) {
     for (let j = 0; j < lowres_picker_size; j++) {
-      const rgb = okhsv_to_srgb(hsv[0], 2 * j * picker_size_inv, 1 - 2 * i * picker_size_inv)
+      const rgb = okhsv_to_srgb(hue, 2 * j * picker_size_inv, 1 - 2 * i * picker_size_inv)
 
       const index = 3 * (i * lowres_picker_size + j)
       lowres_data[index + 0] = rgb[0]
