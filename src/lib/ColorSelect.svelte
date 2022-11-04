@@ -205,8 +205,6 @@
 	</svg>
 </div>
 
-<button on:click={() => (r = Math.round(r))}>Set R</button>
-
 <style>
 	div {
 		position: relative;
