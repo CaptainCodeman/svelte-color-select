@@ -3,7 +3,6 @@
 	import { eps, picker_size, slider_width, border_size, gap_size } from './constants'
 	import { render_main_image, render_slider_image } from './render'
 	import { createEventDispatcher } from 'svelte'
-	import { thread } from './dmc/color-lookup'
 
 	export let r = 0
 	export let g = 0
