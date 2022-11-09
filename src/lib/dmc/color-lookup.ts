@@ -40,8 +40,12 @@ export function closestColor(hex: string, n: number = 6) {
 }
 
 export function threadColor(rgb: number[]) {
+  return thread(rgb).rgb
+}
+
+export function thread(rgb: number[]) {
   const color = { space: sRGB, coords: rgb.map(x => x / 255) }
   const oklab = convert(color, "oklab").coords
   const closest: Item = tree.find({ oklab, rgb }, 1)
-  return closest.id.rgb
+  return closest.id
 }
