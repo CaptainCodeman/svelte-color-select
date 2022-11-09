@@ -138,8 +138,10 @@
 	}
 
 	function onKeydown(event: KeyboardEvent) {
-		event.preventDefault()
-		event.stopPropagation()
+		const keyHandled = () => {
+			event.preventDefault()
+			event.stopPropagation()
+		}
 
 		const step = event.shiftKey ? 10 : 1
 
@@ -150,6 +152,7 @@
 				} else {
 					update_sv(uihsv[1], Math.round(uihsv[2] - step))
 				}
+				keyHandled()
 				break
 
 			case 'ArrowDown':
@@ -158,14 +161,17 @@
 				} else {
 					update_sv(uihsv[1], Math.round(uihsv[2] + step))
 				}
+				keyHandled()
 				break
 
 			case 'ArrowLeft':
 				update_sv(Math.round(uihsv[1] - step), uihsv[2])
+				keyHandled()
 				break
 
 			case 'ArrowRight':
 				update_sv(Math.round(uihsv[1] + step), uihsv[2])
+				keyHandled()
 				break
 		}
 	}
