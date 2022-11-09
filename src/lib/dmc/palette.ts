@@ -488,10 +488,16 @@ export const colorToCode = new Map(palette.map(([code, color, _col, _row, _name]
 export const codeToName = new Map(palette.map(([code, _color, _col, _row, name]) => [code, name]))
 export const maxColors = 512 // palette.length
 
-export function textColor(hex: string) {
+export function textColorHex(hex: string) {
   const r = parseInt(hex.substring(0, 2), 16)
   const g = parseInt(hex.substring(2, 4), 16)
   const b = parseInt(hex.substring(4, 6), 16)
+  return textColorRGB(r, g, b)
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000
+  return yiq > 170 ? '#000' : '#fff'
+}
+
+export function textColorRGB(r: number, g: number, b: number) {
   const yiq = (r * 299 + g * 587 + b * 114) / 1000
   return yiq > 170 ? '#000' : '#fff'
 }
