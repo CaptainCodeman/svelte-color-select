@@ -8,6 +8,8 @@
 	export let g = 0
 	export let b = 0
 
+	export let transform = (rgb: number[]) => rgb
+
 	const dispatch = createEventDispatcher()
 	const width = picker_size + slider_width + gap_size + border_size * 2
 	const height = picker_size + border_size * 2
@@ -35,7 +37,7 @@
 		if (!canvas) return
 
 		if (Math.abs(h - prev_h) > eps) {
-			render_main_image(h, image)
+			render_main_image(h, image, transform)
 			ctx.putImageData(image, 0, 0)
 		}
 
