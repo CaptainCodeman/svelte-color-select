@@ -20,24 +20,31 @@
 
 	export let color: Okhsl | Okhsv | Oklab | Oklch | Rgb
 
-	export let transform = (rgb: number[]) => rgb
+	export let transform = (rgb: Rgb) => rgb
 
 	const dispatch = createEventDispatcher()
 	const width = picker_size + slider_width + gap_size + border_size * 2
 	const height = picker_size + border_size * 2
 
-	const toOKhsl = useMode(modeOkhsl)
+	const toOkhsl = useMode(modeOkhsl)
 	const toOkhsv = useMode(modeOkhsv)
 	const toOklab = useMode(modeOklab)
 	const toOklch = useMode(modeOklch)
 	const toRgb = useMode(modeRgb)
 
-	$: okhsl = toOKhsl(color)!
 	$: okhsv = toOkhsv(color)!
-	$: oklab = toOklab(color)!
-	$: oklch = toOklch(color)!
-	$: rgb = toRgb(color)
 	$: uihsv = scale_to_ui(okhsv)
+	$: transform_fn = (
+		color.mode === 'okhsl'
+			? toOkhsl
+			: color.mode === 'okhsv'
+			? toOkhsv
+			: color.mode === 'oklab'
+			? toOklab
+			: color.mode === 'oklch'
+			? toOklch
+			: toRgb
+	) as typeof toRgb // this just makes the typing less finicky
 	$: update_square(okhsv.h ?? 0)
 
 	// used to prevent re-drawing square for minor hue changes
@@ -90,7 +97,8 @@
 	}
 
 	async function update_rgb() {
-		dispatch('change', { rgb, okhsl, okhsv, oklab, oklch })
+		color = transform_fn(okhsv)
+		dispatch('change', { color })
 	}
 
 	function update_sv(x: number, y: number) {
@@ -105,7 +113,7 @@
 
 	function update_h(x: number, y: number) {
 		let h = clamp(y / picker_size)
-		okhsv.h = h
+		okhsv.h = h * 360
 
 		update_rgb()
 	}

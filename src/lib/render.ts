@@ -1,3 +1,4 @@
+import type { Rgb } from 'culori'
 import { useMode, modeRgb, modeOkhsl, modeOkhsv } from 'culori/fn'
 import { picker_size, slider_width } from './constants'
 
@@ -119,7 +120,7 @@ function upscale(lowres_data: Float32Array, data: Uint8ClampedArray) {
 export function render_main_image(
 	hue: number,
 	image: ImageData,
-	transform: (rgb: number[]) => number[]
+	transform: (rgb: Rgb) => Rgb
 ) {
 	const data = image.data
 	const lowres_data = new Float32Array(
