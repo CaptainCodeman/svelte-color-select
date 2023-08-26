@@ -20,10 +20,8 @@
 	import { render_main_image, render_slider_image } from './render'
 	import type { ConvertFn } from 'culori/src/converter'
 
-	export type Color = Okhsl | Okhsv | Oklab | Oklch | Rgb
+	type Color = Okhsl | Okhsv | Oklab | Oklch | Rgb
 	export let color: Color
-
-	export let transform = (rgb: Rgb) => rgb
 
 	const dispatch = createEventDispatcher()
 	const width = picker_size + slider_width + gap_size + border_size * 2
@@ -39,39 +37,6 @@
 	$: convertToOutput = convertToOutputFn(mode) as ConvertFn
 	$: okhsv = convertToInternal(color)
 	$: uihsv = scale_to_ui(okhsv)
-	$: update_square(okhsv.h ?? 0)
-
-	// used to prevent re-drawing square for minor hue changes
-	let prev_h = 0
-
-	let canvas: HTMLCanvasElement
-	let ctx: CanvasRenderingContext2D
-	let image: ImageData
-
-	function render_square(node: HTMLCanvasElement) {
-		canvas = node
-		ctx = canvas.getContext('2d')!
-		image = ctx.getImageData(0, 0, canvas.width, canvas.height)
-
-		update_square(okhsv.h ?? 0)
-	}
-
-	function update_square(h: number) {
-		if (!canvas) return
-
-		if (Math.abs(h - prev_h) > eps) {
-			render_main_image(h, image, transform)
-			ctx.putImageData(image, 0, 0)
-		}
-
-		prev_h = h
-	}
-
-	function render_slider(node: HTMLCanvasElement) {
-		const image = render_slider_image()
-		let ctx = node.getContext('2d')!
-		ctx.putImageData(image, 0, 0)
-	}
 
 	function scale_to_ui(okhsv: Okhsv): Okhsv {
 		return {
@@ -247,7 +212,7 @@
 		style:top="{border_size}px"
 		style:left="{border_size}px"
 		use:pointer={update_sv}
-		use:render_square
+		use:render_main_image={okhsv.h ?? 0}
 	/>
 	<canvas
 		width={slider_width}
@@ -255,7 +220,7 @@
 		style:top="{border_size}px"
 		style:left="{picker_size + gap_size}px"
 		use:pointer={update_h}
-		use:render_slider
+		use:render_slider_image
 	/>
 
 	<svg {width} {height}>
