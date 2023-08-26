@@ -2,11 +2,12 @@
 	import type { Okhsv, Okhsl, Oklab, Oklch, Rgb } from 'culori'
 	import {
 		useMode,
-		modeRgb,
 		modeOklab,
 		modeOklch,
 		modeOkhsl,
 		modeOkhsv,
+		convertOkhsvToOklab,
+		convertOklabToRgb,
 	} from 'culori/fn'
 	import { createEventDispatcher } from 'svelte'
 	import {
@@ -17,8 +18,10 @@
 		gap_size,
 	} from './constants'
 	import { render_main_image, render_slider_image } from './render'
+	import type { ConvertFn } from 'culori/src/converter'
 
-	export let color: Okhsl | Okhsv | Oklab | Oklch | Rgb
+	export type Color = Okhsl | Okhsv | Oklab | Oklch | Rgb
+	export let color: Color
 
 	export let transform = (rgb: Rgb) => rgb
 
@@ -30,21 +33,12 @@
 	const toOkhsv = useMode(modeOkhsv)
 	const toOklab = useMode(modeOklab)
 	const toOklch = useMode(modeOklch)
-	const toRgb = useMode(modeRgb)
 
-	$: okhsv = toOkhsv(color)!
+	$: mode = color.mode
+	$: convertToInternal = convertToInternalFn(mode) as ConvertFn<'okhsv'>
+	$: convertToOutput = convertToOutputFn(mode) as ConvertFn
+	$: okhsv = convertToInternal(color)
 	$: uihsv = scale_to_ui(okhsv)
-	$: transform_fn = (
-		color.mode === 'okhsl'
-			? toOkhsl
-			: color.mode === 'okhsv'
-			? toOkhsv
-			: color.mode === 'oklab'
-			? toOklab
-			: color.mode === 'oklch'
-			? toOklch
-			: toRgb
-	) as typeof toRgb // this just makes the typing less finicky
 	$: update_square(okhsv.h ?? 0)
 
 	// used to prevent re-drawing square for minor hue changes
@@ -96,8 +90,40 @@
 		return value < 0 ? 0 : value > 1 ? picker_size : value * picker_size
 	}
 
+	// return a fn that will convert from the output color mode to the internal okhsv
+	function convertToInternalFn(colorMode: "okhsl" | "okhsv" | "oklab" | "oklch" | "rgb") {
+		switch (colorMode) {
+			case 'okhsl':
+				return toOkhsv
+			case 'okhsv':
+				return toOkhsv
+			case 'oklab':
+				return toOkhsv
+			case 'oklch':
+				return toOkhsv
+			case 'rgb':
+				return toOkhsv
+		}
+	}
+
+	// return a fn that will convert from the internal okkhsv to the output color mode
+	function convertToOutputFn(colorMode: "okhsl" | "okhsv" | "oklab" | "oklch" | "rgb") {
+		switch (colorMode) {
+			case 'okhsl':
+				return toOkhsl
+			case 'okhsv':
+				return toOkhsv
+			case 'oklab':
+				return toOklab
+			case 'oklch':
+				return toOklch
+			case 'rgb':
+				return (color: Okhsv) => convertOklabToRgb(convertOkhsvToOklab(color))
+		}
+	}
+
 	async function update_rgb() {
-		color = transform_fn(okhsv)
+		color = convertToOutput(okhsv)
 		dispatch('change', { color })
 	}
 

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { formatCss, type Rgb } from 'culori/fn'
+	import type { Rgb } from 'culori/fn'
 	import ColorSelect from '$lib'
 
 	// https://medium.com/@valgaze/the-hidden-purple-memorial-in-your-web-browser-7d84813bb416
-	let color: Rgb = { mode: 'rgb', r: 0.4, g: 0.2, b: 0.6 } 
+	let color: Rgb = { mode: 'rgb', r: 0.4, g: 0.2, b: 0.6 }
 </script>
 
 <svelte:head>
@@ -38,7 +38,7 @@
 	</div>
 
 	<div class="bg-white inline-block ml-24 my-6 rounded-[10px]">
-		<div class="w-48 h-12 m-1 rounded-[6px]" style:background-color={formatCss(color)} />
+		<div class="w-48 h-12 m-1 rounded-[6px]" style:background-color="rgb({255 * color.r},{255 * color.g},{255 * color.b})" />
 	</div>
 
 	<p class="text-white">See <a class="text-blue-300" href="https://bottosson.github.io/posts/colorpicker/">Okhsv and Okhsl by Björn Ottosson</a></p>

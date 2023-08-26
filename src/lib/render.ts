@@ -1,14 +1,9 @@
 import type { Rgb } from 'culori'
-import { useMode, modeRgb, modeOkhsl, modeOkhsv } from 'culori/fn'
+import { convertOkhsvToOklab, convertOklabToRgb, convertOkhslToOklab } from 'culori/fn'
 import { picker_size, slider_width } from './constants'
 
 const lowres_picker_size = Math.round((picker_size + 1) / 2)
 const picker_size_inv = 1 / picker_size
-
-useMode(modeOkhsl)
-useMode(modeOkhsv)
-
-const toRgb = useMode(modeRgb)
 
 function upscale(lowres_data: Float32Array, data: Uint8ClampedArray) {
 	for (let i = 0; i < lowres_picker_size - 1; i++) {
@@ -129,12 +124,11 @@ export function render_main_image(
 
 	for (let i = 0; i < lowres_picker_size; i++) {
 		for (let j = 0; j < lowres_picker_size; j++) {
-			const rgb = toRgb({
-				mode: 'okhsv',
+			const rgb = transform(convertOklabToRgb(convertOkhsvToOklab({
 				h: hue,
 				s: 2 * j * picker_size_inv,
 				v: 1 - 2 * i * picker_size_inv,
-			})
+			})))
 
 			const index = 3 * (i * lowres_picker_size + j)
 			lowres_data[index + 0] = rgb.r * 255
@@ -160,12 +154,11 @@ export function render_slider_image() {
 		const a_ = Math.cos(2 * Math.PI * i * picker_size_inv)
 		const b_ = Math.sin(2 * Math.PI * i * picker_size_inv)
 
-		const rgb = toRgb({
-			mode: 'okhsl',
+		const rgb = convertOklabToRgb(convertOkhslToOklab({
 			h: 360 * (i * picker_size_inv),
 			s: 0.9,
 			l: 0.65 + 0.2 * b_ - 0.09 * a_,
-		})
+		}))
 
 		for (let j = 0; j < slider_width; j++) {
 			const index = 4 * (i * slider_width + j)
