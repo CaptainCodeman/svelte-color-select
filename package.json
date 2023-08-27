@@ -31,7 +31,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "package": "svelte-kit sync && svelte-package && publint",
+    "package": "svelte-kit sync && vite-build --mode library && publint",
     "prepublishOnly": "npm run package",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
@@ -61,6 +61,7 @@
     "@sveltejs/adapter-static": "^2.0.3",
     "@sveltejs/kit": "^1.22.6",
     "@sveltejs/package": "^2.2.1",
+    "@sveltejs/vite-plugin-svelte": "^2.4.5",
     "@tailwindcss/forms": "^0.5.4",
     "@tailwindcss/typography": "^0.5.9",
     "autoprefixer": "^10.4.15",

@@ -1,6 +1,6 @@
 // shaders adapted from https://github.com/dokozero/okcolor
-import v_shader from '$lib/v_shader.glsl'
-import f_shader from '$lib/f_shader.glsl'
+import v_shader from './v_shader.glsl'
+import f_shader from './f_shader.glsl'
 import { convertOklabToRgb, convertOkhslToOklab } from 'culori/fn'
 import { picker_size, slider_width } from './constants'
 
