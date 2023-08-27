@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
 					lib: {
 						entry: 'src/lib/index.ts',
 						formats: ['es'],
-						fileName: 'index.js',
+						fileName: 'index',
 					}
 				}
 			}

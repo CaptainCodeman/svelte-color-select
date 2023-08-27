@@ -31,7 +31,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "package": "svelte-kit sync && vite-build --mode library && publint",
+    "package": "svelte-kit sync && vite build --mode library && publint",
     "prepublishOnly": "npm run package",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
