@@ -30,7 +30,9 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "package": "svelte-kit sync && svelte-package && publint",
+    "preview": "vite preview",
+    "shaders": "vite build --config vite.shaders.ts",
+    "package": "svelte-kit sync && svelte-package && npm run shaders && publint",
     "prepublishOnly": "npm run package",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
@@ -57,19 +59,20 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^2.0.3",
-    "@sveltejs/kit": "^1.22.6",
-    "@sveltejs/package": "^2.2.1",
-    "@tailwindcss/forms": "^0.5.4",
+    "@sveltejs/kit": "^1.23.0",
+    "@sveltejs/package": "^2.2.2",
+    "@tailwindcss/forms": "^0.5.5",
     "@tailwindcss/typography": "^0.5.9",
     "autoprefixer": "^10.4.15",
     "postcss": "^8.4.28",
     "postcss-load-config": "^4.0.1",
-    "publint": "^0.1.16",
+    "publint": "^0.2.2",
     "svelte": "^4.2.0",
     "svelte-check": "^3.5.0",
     "tailwindcss": "^3.3.3",
     "tslib": "^2.6.2",
-    "typescript": "^5.1.6",
-    "vite": "^4.4.9"
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
+    "vite-plugin-glsl": "^1.1.2"
   }
 }
