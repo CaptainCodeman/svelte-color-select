@@ -1,21 +1,16 @@
 import { f_shader, v_shader } from './shaders'
-import { convertOklabToRgb, convertOkhslToOklab } from 'culori/fn'
 import { picker_size, slider_width } from './constants'
-
-const picker_size_inv = 1 / picker_size
+import { okhsv_to_oklab, oklab_to_rgb } from './color'
 
 export function render_slider_image(canvas: HTMLCanvasElement) {
 	const ctx = canvas.getContext('2d')!
 	const data = new Uint8ClampedArray(picker_size * slider_width * 4)
 
 	for (let i = 0; i < picker_size; i++) {
-		const a_ = Math.cos(2 * Math.PI * i * picker_size_inv)
-		const b_ = Math.sin(2 * Math.PI * i * picker_size_inv)
-
-		const rgb = convertOklabToRgb(convertOkhslToOklab({
-			h: 360 * (i * picker_size_inv),
+		const rgb = oklab_to_rgb(okhsv_to_oklab({
+			h: i / picker_size * 360,
 			s: 0.9,
-			l: 0.65 + 0.2 * b_ - 0.09 * a_,
+			v: 0.8,
 		}))
 
 		for (let j = 0; j < slider_width; j++) {

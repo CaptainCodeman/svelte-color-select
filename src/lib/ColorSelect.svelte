@@ -1,14 +1,4 @@
 <script lang="ts">
-	import type { Okhsv, Okhsl, Oklab, Oklch, Rgb } from 'culori'
-	import {
-		useMode,
-		modeOklab,
-		modeOklch,
-		modeOkhsl,
-		modeOkhsv,
-		convertOkhsvToOklab,
-		convertOklabToRgb,
-	} from 'culori/fn'
 	import { createEventDispatcher } from 'svelte'
 	import {
 		eps,
@@ -18,30 +8,23 @@
 		gap_size,
 	} from './constants'
 	import { render_main_image, render_slider_image } from './render'
-	import type { ConvertFn } from 'culori/src/converter'
+	import type { RGB, OKlab, OKhsv } from './color'
+	import { oklab_to_okhsv, rgb_to_oklab, okhsv_to_oklab, oklab_to_rgb } from './color'
 
-	type Color = Okhsl | Okhsv | Oklab | Oklch | Rgb
-	export let color: Color
+	export let rgb: RGB | undefined = undefined
+	export let oklab: OKlab | undefined = undefined
+	export let okhsv: OKhsv | undefined = undefined
 
 	const dispatch = createEventDispatcher()
 	const width = picker_size + slider_width + gap_size + border_size * 2
 	const height = picker_size + border_size * 2
 
-	const toOkhsl = useMode(modeOkhsl)
-	const toOkhsv = useMode(modeOkhsv)
-	const toOklab = useMode(modeOklab)
-	const toOklch = useMode(modeOklch)
+	$: color = convertToInternal(rgb, oklab, okhsv)
+	$: uihsv = scale_to_ui(color)
 
-	$: mode = color.mode
-	$: convertToInternal = convertToInternalFn(mode) as ConvertFn<'okhsv'>
-	$: convertToOutput = convertToOutputFn(mode) as ConvertFn
-	$: okhsv = convertToInternal(color)
-	$: uihsv = scale_to_ui(okhsv)
-
-	function scale_to_ui(okhsv: Okhsv): Okhsv {
+	function scale_to_ui(okhsv: OKhsv): OKhsv {
 		return {
-			mode: 'okhsv',
-			h: clamp_ui((okhsv.h ?? 0) / 360),
+			h: clamp_ui(okhsv.h / 360),
 			s: clamp_ui(okhsv.s),
 			v: clamp_ui(1 - okhsv.v),
 		}
@@ -55,58 +38,54 @@
 		return value < 0 ? 0 : value > 1 ? picker_size : value * picker_size
 	}
 
-	// return a fn that will convert from the output color mode to the internal okhsv
-	function convertToInternalFn(colorMode: "okhsl" | "okhsv" | "oklab" | "oklch" | "rgb") {
-		switch (colorMode) {
-			case 'okhsl':
-				return toOkhsv
-			case 'okhsv':
-				return toOkhsv
-			case 'oklab':
-				return toOkhsv
-			case 'oklch':
-				return toOkhsv
-			case 'rgb':
-				return toOkhsv
+	function convertToInternal(rgb: RGB | undefined, oklab: OKlab | undefined, okhsv: OKhsv | undefined) {
+		if (okhsv) {
+			return okhsv
 		}
+
+		if (oklab) {
+			return oklab_to_okhsv(oklab)
+		}
+
+		if (rgb) {
+			return oklab_to_okhsv(rgb_to_oklab(rgb))
+		}
+
+		throw 'rgb, oklab, or okhsv required'
 	}
 
-	// return a fn that will convert from the internal okkhsv to the output color mode
-	function convertToOutputFn(colorMode: "okhsl" | "okhsv" | "oklab" | "oklch" | "rgb") {
-		switch (colorMode) {
-			case 'okhsl':
-				return toOkhsl
-			case 'okhsv':
-				return toOkhsv
-			case 'oklab':
-				return toOklab
-			case 'oklch':
-				return toOklch
-			case 'rgb':
-				return (color: Okhsv) => convertOklabToRgb(convertOkhsvToOklab(color))
+	async function update_input() {
+		if (okhsv) {
+			okhsv = color
+			dispatch('change', { okhsv })
 		}
-	}
 
-	async function update_rgb() {
-		color = convertToOutput(okhsv)
-		dispatch('change', { color })
+		if (oklab) {
+			oklab = okhsv_to_oklab(color)
+			dispatch('change', { oklab })
+		}
+
+		if (rgb) {
+			rgb = oklab_to_rgb(okhsv_to_oklab(color))
+			dispatch('change', { rgb })
+		}
 	}
 
 	function update_sv(x: number, y: number) {
 		let new_s = clamp(x / picker_size)
 		let new_v = clamp(1 - y / picker_size)
 
-		okhsv.s = new_s
-		okhsv.v = new_v
+		color.s = new_s
+		color.v = new_v
 
-		update_rgb()
+		update_input()
 	}
 
 	function update_h(x: number, y: number) {
 		let h = clamp(y / picker_size)
-		okhsv.h = h * 360
+		color.h = h * 360
 
-		update_rgb()
+		update_input()
 	}
 
 	function pointer(
@@ -212,7 +191,7 @@
 		style:top="{border_size}px"
 		style:left="{border_size}px"
 		use:pointer={update_sv}
-		use:render_main_image={okhsv.h ?? 0}
+		use:render_main_image={color.h}
 	/>
 	<canvas
 		width={slider_width}
