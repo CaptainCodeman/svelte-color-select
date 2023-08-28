@@ -3,6 +3,7 @@ import {
   convertOkhsvToOklab,
   convertRgbToOklab,
   convertOklabToOkhsv,
+  convertOkhslToOklab,
 } from 'culori/fn'
 
 
@@ -24,6 +25,12 @@ export interface OKhsv {
   v: number
 }
 
+export interface OKhsl {
+  h: number
+  s: number
+  l: number
+}
+
 export function oklab_to_rgb(oklab: OKlab): RGB {
   return convertOklabToRgb(oklab)
 }
@@ -39,4 +46,8 @@ export function okhsv_to_oklab(okhsv: OKhsv): OKlab {
 
 export function rgb_to_oklab(rgb: RGB): OKlab {
   return convertRgbToOklab(rgb)
+}
+
+export function okhsl_to_oklab(okhsl: OKhsl): OKlab {
+  return convertOkhslToOklab(okhsl)
 }
