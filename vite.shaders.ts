@@ -9,7 +9,7 @@ export default defineConfig({
   build: {
     emptyOutDir: false,
     lib: {
-      entry: 'src/shaders/index.ts',
+      entry: 'src/lib/shaders.ts',
       formats: ['es',],
       fileName: 'shaders',
     }
