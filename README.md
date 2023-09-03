@@ -12,22 +12,43 @@ Installing your package manager of choice:
 
     pnpm i svelte-color-select
 
-Import into your component and bind `r`, `g`, and `b` values to it:
+Import into your component and pass an `{ r, g, b }` object to the `rgb` prop (with channels normalized 0–1):
 
 ```svelte
 <script lang="ts">
-	import ColorSelect from 'svelte-color-select`
+  import ColorSelect from 'svelte-color-select'
 
-	let r = 102
-	let g = 51
-	let b = 153
+  // https://medium.com/@valgaze/the-hidden-purple-memorial-in-your-web-browser-7d84813bb416
+  let rgb: RGB = { r: 0.4, g: 0.2, b: 0.6 }
 </script>
 
-<ColorSelect bind:r bind:g bind:b />
+<ColorSelect bind:rgb />
 ```
 
-Alternatively, you can set the initial rgb values and listen to the `change` event to see the updates in both rgb and okhsv format:
+### Oklab
+
+The [Oklab](https://bottosson.github.io/posts/oklab/) colorspace is supported by using a `oklab` prop instead of `rgb`:
 
 ```svelte
-<ColorSelect {r} {g} {b} on:change={e => console.log(e.detail)} />
+<script lang="ts">
+  import ColorSelect, { type Oklab } from 'svelte-color-select'
+
+  let oklab: OKlab = { l: 0.44, a: 0.088, b: -0.134 }
+</script>
+
+<ColorSelect bind:oklab />
+```
+
+### Okhsv
+
+The [Okhsv](https://bottosson.github.io/posts/colorpicker/) colorspace is supported by using a `okhsv` prop instead of `rgb`:
+
+```svelte
+<script lang="ts">
+  import ColorSelect, { type OKhsv } from 'svelte-color-select'
+
+  let okhsv: OKhsv = { h: 303.37, s: 0.806, v: 0.608 }
+</script>
+
+<ColorSelect bind:okhsv />
 ```
