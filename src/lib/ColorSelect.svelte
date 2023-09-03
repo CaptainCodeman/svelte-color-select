@@ -9,7 +9,13 @@
 	} from './constants'
 	import { render_main_image, render_slider_image } from './render'
 	import type { RGB, OKlab, OKhsv } from './color'
-	import { oklab_to_okhsv, rgb_to_oklab, okhsv_to_oklab, oklab_to_rgb } from './color'
+	import {
+		oklab_to_okhsv,
+		rgb_to_oklab,
+		okhsv_to_oklab,
+		oklab_to_rgb,
+		clamp_color,
+	} from './color'
 
 	export let rgb: RGB | undefined = undefined
 	export let oklab: OKlab | undefined = undefined
@@ -38,17 +44,21 @@
 		return value < 0 ? 0 : value > 1 ? picker_size : value * picker_size
 	}
 
-	function convertToInternal(rgb: RGB | undefined, oklab: OKlab | undefined, okhsv: OKhsv | undefined) {
+	function convertToInternal(
+		rgb: RGB | undefined,
+		oklab: OKlab | undefined,
+		okhsv: OKhsv | undefined
+	) {
 		if (okhsv) {
-			return okhsv
+			return clamp_color(okhsv)
 		}
 
 		if (oklab) {
-			return oklab_to_okhsv(oklab)
+			return clamp_color(oklab_to_okhsv(oklab))
 		}
 
 		if (rgb) {
-			return oklab_to_okhsv(rgb_to_oklab(rgb))
+			return clamp_color(oklab_to_okhsv(rgb_to_oklab(rgb)))
 		}
 
 		throw 'rgb, oklab, or okhsv required'
