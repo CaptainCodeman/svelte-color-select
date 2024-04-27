@@ -1,78 +1,79 @@
 {
-  "name": "svelte-color-select",
-  "description": "Okhsl color select for Svelte",
-  "version": "0.0.12",
-  "type": "module",
-  "license": "MIT",
-  "keywords": [
-    "svelte",
-    "oklab",
-    "kkhsl",
-    "hsl",
-    "color",
-    "color-picker",
-    "color-select"
-  ],
-  "homepage": "https://captaincodeman.github.io/svelte-color-select/",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/captaincodeman/svelte-color-select.git"
-  },
-  "bugs": {
-    "url": "https://github.com/captaincodeman/svelte-color-select/issues",
-    "email": "simon@captaincodeman.com"
-  },
-  "author": {
-    "name": "Simon Green",
-    "email": "simon@captaincodeman.com",
-    "url": "https://www.captaincodeman.com/"
-  },
-  "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "vite preview",
-    "shaders": "vite build --config vite.shaders.ts",
-    "package": "svelte-kit sync && svelte-package && npm run shaders && publint",
-    "prepublishOnly": "npm run package",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "svelte": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist",
-    "!dist/**/*.test.*",
-    "!dist/**/*.spec.*"
-  ],
-  "svelte": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "peerDependencies": {
-    "svelte": "^3.54.0 || ^4.0.0"
-  },
-  "dependencies": {
-    "@types/culori": "^2.0.0",
-    "culori": "^3.2.0"
-  },
-  "devDependencies": {
-    "@sveltejs/adapter-static": "^2.0.3",
-    "@sveltejs/kit": "^1.23.0",
-    "@sveltejs/package": "^2.2.2",
-    "@tailwindcss/forms": "^0.5.5",
-    "@tailwindcss/typography": "^0.5.9",
-    "autoprefixer": "^10.4.15",
-    "postcss": "^8.4.28",
-    "postcss-load-config": "^4.0.1",
-    "publint": "^0.2.2",
-    "svelte": "^4.2.0",
-    "svelte-check": "^3.5.0",
-    "tailwindcss": "^3.3.3",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2",
-    "vite": "^4.4.9",
-    "vite-plugin-glsl": "^1.1.2"
-  }
+	"name": "svelte-color-select",
+	"description": "Okhsl color select for Svelte",
+	"version": "0.0.13",
+	"type": "module",
+	"license": "MIT",
+	"keywords": [
+		"svelte",
+		"oklab",
+		"kkhsl",
+		"hsl",
+		"color",
+		"color-picker",
+		"color-select"
+	],
+	"homepage": "https://captaincodeman.github.io/svelte-color-select/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/captaincodeman/svelte-color-select.git"
+	},
+	"bugs": {
+		"url": "https://github.com/captaincodeman/svelte-color-select/issues",
+		"email": "simon@captaincodeman.com"
+	},
+	"author": {
+		"name": "Simon Green",
+		"email": "simon@captaincodeman.com",
+		"url": "https://www.captaincodeman.com/"
+	},
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"shaders": "vite build --config vite.shaders.ts",
+		"package": "svelte-kit sync && svelte-package && npm run shaders && publint",
+		"prepublishOnly": "npm run package",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"!dist/**/*.test.*",
+		"!dist/**/*.spec.*"
+	],
+	"svelte": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"peerDependencies": {
+		"svelte": "^3.54.0 || ^4.0.0 || ^5.0.0"
+	},
+	"dependencies": {
+		"@types/culori": "^2.1.0",
+		"culori": "^4.0.1"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-static": "^3.0.1",
+		"@sveltejs/kit": "^2.5.7",
+		"@sveltejs/package": "^2.3.1",
+		"@sveltejs/vite-plugin-svelte": "^3.1.0",
+		"@tailwindcss/forms": "^0.5.7",
+		"@tailwindcss/typography": "^0.5.13",
+		"autoprefixer": "^10.4.19",
+		"postcss": "^8.4.38",
+		"postcss-load-config": "^5.0.3",
+		"publint": "^0.2.7",
+		"svelte": "^4.2.15",
+		"svelte-check": "^3.7.0",
+		"tailwindcss": "^3.4.3",
+		"tslib": "^2.6.2",
+		"typescript": "^5.4.5",
+		"vite": "^5.2.10",
+		"vite-plugin-glsl": "^1.3.0"
+	}
 }
