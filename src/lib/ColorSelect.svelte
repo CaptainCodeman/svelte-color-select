@@ -84,6 +84,8 @@
 	function update_h(x: number, y: number) {
 		let h = clamp(y / picker_size)
 		color.h = h * 360
+		color.s = Math.max(color.s, 0.00001)
+		color.v = Math.max(color.v, 0.00001)
 
 		update_input()
 	}
