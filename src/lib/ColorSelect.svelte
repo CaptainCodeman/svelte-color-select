@@ -9,7 +9,7 @@
 	} from './constants'
 	import { render_main_image, render_slider_image } from './render'
 	import type { RGB, OKlab, OKhsv } from './color'
-	import { oklab_to_okhsv, rgb_to_oklab, okhsv_to_oklab, oklab_to_rgb } from './color'
+	import { oklab_to_okhsv, okhsv_to_oklab, rgb_to_okhsv, okhsv_to_rgb } from './color'
 
 	export let rgb: RGB | undefined = undefined
 	export let oklab: OKlab | undefined = undefined
@@ -48,7 +48,7 @@
 		}
 
 		if (rgb) {
-			return oklab_to_okhsv(rgb_to_oklab(rgb))
+			return rgb_to_okhsv(rgb)
 		}
 
 		throw 'rgb, oklab, or okhsv required'
@@ -66,7 +66,7 @@
 		}
 
 		if (rgb) {
-			rgb = oklab_to_rgb(okhsv_to_oklab(color))
+			rgb = okhsv_to_rgb(color)
 			dispatch('change', { rgb })
 		}
 	}
